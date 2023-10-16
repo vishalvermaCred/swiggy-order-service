@@ -1,5 +1,9 @@
 from enum import Enum
 
+"""
+    create constants here to be used later
+"""
+
 PSQL_USER_DB = "user_db"
 phone_regex = r"^(0\d{10}|[1-9]\d{9,11})$"
 email_regex = r"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"

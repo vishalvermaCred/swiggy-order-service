@@ -6,6 +6,10 @@ from starlette.responses import JSONResponse, Response
 
 from app.settings import SERVICE_NAME, LOG_LEVEL
 
+"""
+    functions declared here will be executed before the API runs
+"""
+
 extra = {"app_name": SERVICE_NAME}
 logging.basicConfig(level=LOG_LEVEL, format=f"%(asctime)s {SERVICE_NAME} %(levelname)s : %(message)s")
 logger = logging.getLogger(__name__)

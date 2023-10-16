@@ -21,6 +21,9 @@ async def health_check():
 
 @router.post("/place-order")
 async def place_order(body: PlaceOrder = Body(...)):
+    """
+    api to place the order
+    """
     logger.info(f"{LOGGER_KEY}.place_order")
     response = await process_order(body.dict())
     return await generate_response(**response)

@@ -5,6 +5,9 @@ from app.constants import ResponseKeys
 
 
 async def generate_response(success, message, code=HTTPStatus.OK, data=None):
+    """
+    returns the standard response for all APIs
+    """
     response = {
         ResponseKeys.SUCCESS: success,
         ResponseKeys.MESSAGE: message,

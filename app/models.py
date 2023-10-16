@@ -5,6 +5,10 @@ from pydantic.class_validators import validator
 
 from app.constants import OrderStatus
 
+"""
+    creating models to validate the payload of APIs using pydantic
+"""
+
 
 class OrderBaseModel(BaseModel):
     class Config:
