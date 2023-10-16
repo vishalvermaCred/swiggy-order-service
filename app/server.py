@@ -1,5 +1,7 @@
 import logging
 from os import getenv
+from json import dumps
+from aiokafka import AIOKafkaProducer
 
 from fastapi import FastAPI
 from fastapi.exceptions import RequestValidationError
@@ -11,7 +13,14 @@ from app.database import Postgres
 from app.exceptions import HTTPBaseException, MissingEnvConfigsException
 from app.middlewares import LoginMiddleware
 from app.routes import router
-from app.settings import BASE_ROUTE, LOG_LEVEL, SERVICE_NAME, ORDER_DB_CONFIGS
+from app.settings import (
+    BASE_ROUTE,
+    KAFKA_BOOTSTRAP_SERVERS,
+    KAFKA_PRODUCER_CLIENT_ID,
+    LOG_LEVEL,
+    ORDER_DB_CONFIGS,
+    SERVICE_NAME,
+)
 
 
 # Intializing app
@@ -66,6 +75,18 @@ async def _init_db():
     return database
 
 
+async def init_prodcuers():
+    servers = KAFKA_BOOTSTRAP_SERVERS.split(",")
+    app_context.producer = AIOKafkaProducer(
+        bootstrap_servers=servers,
+        client_id=KAFKA_PRODUCER_CLIENT_ID,
+        key_serializer=lambda x: dumps(x).encode("utf-8"),
+        value_serializer=lambda x: str(x).encode("utf-8"),
+    )
+    await app_context.producer.start()
+    return
+
+
 @app.on_event("startup")
 async def startup_event():
     logger.info("SERVER STARTING...")
@@ -76,6 +97,8 @@ async def startup_event():
     await _init_routers()
     app_context.db = await _init_db()
     logger.info("🟢 Postgres DB Connected...")
+    await init_prodcuers()
+    logger.info("🟢 Kafka Producer Initialised...")
 
 
 @app.on_event("shutdown")

@@ -13,6 +13,9 @@ LOGGER_KEY = "app.router"
 
 @router.get("/public/healthz")
 async def health_check():
+    """
+    health api of order service to check if order service is working fine or not.
+    """
     return {"message": "OK"}
 
 
